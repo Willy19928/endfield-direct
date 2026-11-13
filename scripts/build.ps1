@@ -13,13 +13,15 @@ $configSource = Join-Path $projectRoot 'src\AppConfig.cs'
 $manifest = Join-Path $projectRoot 'src\app.manifest'
 $testExe = Join-Path $obj 'ConfigTests.exe'
 $executable = Join-Path $dist 'Endfield-Direct.exe'
+$icon = Join-Path $projectRoot 'assets\app.ico'
+if (-not (Test-Path -LiteralPath $icon)) { throw '找不到圖示，請先執行 scripts\build-icon.ps1。' }
 
 & $compiler /nologo /target:exe /platform:x64 /optimize+ /warn:4 /warnaserror+ /reference:System.Web.Extensions.dll "/out:$testExe" $configSource (Join-Path $projectRoot 'tests\ConfigTests.cs')
 if ($LASTEXITCODE -ne 0) { throw "測試程式編譯失敗：$LASTEXITCODE" }
 & $testExe
 if ($LASTEXITCODE -ne 0) { throw "設定測試失敗：$LASTEXITCODE" }
 
-& $compiler /nologo /target:winexe /platform:x64 /optimize+ /warn:4 /warnaserror+ /reference:System.Web.Extensions.dll "/win32manifest:$manifest" "/out:$executable" $source $configSource
+& $compiler /nologo /target:winexe /platform:x64 /optimize+ /warn:4 /warnaserror+ /reference:System.Web.Extensions.dll "/win32icon:$icon" "/win32manifest:$manifest" "/out:$executable" $source $configSource
 if ($LASTEXITCODE -ne 0) { throw "編譯失敗：$LASTEXITCODE" }
 if ((Get-Item -LiteralPath $executable).Length -eq 0) { throw '編譯產生的 EXE 為空檔案。' }
 Copy-Item -LiteralPath (Join-Path $projectRoot 'config.example.json') -Destination $dist

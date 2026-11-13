@@ -10,6 +10,9 @@ using System.Text;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
 
+[assembly: AssemblyVersion("1.4.1.0")]
+[assembly: AssemblyFileVersion("1.4.1.0")]
+
 // x64 .NET Framework；asInvoker 沿用呼叫者權限。
 // 目標程式需要提升權限時顯示錯誤，由使用者決定是否以系統管理員身分執行。
 // 官方啟動器程序保持暫停，不修改檔案或讀取 SDK 紀錄。
